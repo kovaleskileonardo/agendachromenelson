@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Reservas Chromebook - Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: url("{{ url_for('static', filename='fundo_login.png') }}") no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    /* Card base */
+    .login-card {
+      width: 100%;
+      max-width: 520px;   /* DESKTOP maior */
+      padding: 1rem;
+    }
+
+    /* MOBILE: ocupa quase tudo */
+    @media (max-width: 576px) {
+      .login-card {
+        max-width: 100%;
+        margin: 0 1rem;
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body class="d-flex justify-content-center align-items-center vh-100">
+
+  <div class="card shadow login-card">
+    <div class="card-body p-4 p-sm-5">
+      <h2 class="text-center mb-4 fw-bold">Reservas Chromebook</h2>
+
+      <!-- Mensagens flash -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="mt-3">
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form method="POST">
+        <!-- Campo usuário com complemento fixo -->
+        <div class="mb-3 input-group w-100">
+          <input type="text" name="usuario" class="form-control form-control-lg" placeholder="Usuário" required>
+          <span class="input-group-text">@edu.joinville.sc.gov.br</span>
+        </div>
+
+        <!-- Campo senha -->
+        <div class="mb-3 w-100 mx-auto">
+          <input type="password" name="senha" class="form-control form-control-lg" placeholder="Senha" required>
+        </div>
+
+        <!-- Botão login -->
+        <div class="mb-3 w-100 mx-auto">
+          <button type="submit" class="btn btn-primary btn-lg w-100">Entrar</button>
+        </div>
+      </form>
+
+      <!-- Link para cadastro -->
+      <div class="text-center mt-3">
+        <a href="{{ url_for('register') }}" class="btn btn-outline-secondary w-100 mt-2">
+          Cadastrar novo usuário
+        </a>
+      </div>
+
+      <!-- Rodapé -->
+      <div class="text-center mt-3">
+        <small class="text-muted">Sistema de reservas de Chromebooks</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script para esconder automaticamente os alerts -->
+  <script>
+    setTimeout(function() {
+      document.querySelectorAll('.alert').forEach(function(alerta) {
+        alerta.classList.remove("show"); // inicia fade-out
+        alerta.classList.add("fade");
+        setTimeout(function() {
+          alerta.remove(); // remove do DOM após animação
+        }, 500);
+      });
+    }, 2000); // 2 segundos
+  </script>
+
+</body>
+</html>

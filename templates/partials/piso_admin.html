@@ -1,0 +1,83 @@
+<!-- Carrinho Chrome 1 -->
+<div class="col-md-6 border-end">
+  <h6 class="text-center text-decoration-underline">Carrinho Chrome 1</h6>
+  <table class="table table-sm">
+    <tbody>
+      {% for h in horarios|sort(attribute='aula') if h.periodo==periodo and h.piso==piso and h.vaga==1 %}
+        <tr>
+          <td><strong>Aula</strong> <strong>{{ h.aula }}</strong></td>
+          <td>
+            {% if h.user %}
+              {{ h.user.nome }} ({{ h.user.turma }})
+            {% elif h.bloqueado %}
+              <span class="text-muted">Feriado/Ponto Facultativo</span>
+            {% else %}
+              Livre
+            {% endif %}
+          </td>
+          <td>
+            {% if h.user %}
+              <form method="POST" action="{{ url_for('desagendar', id=h.id) }}">
+                <button type="submit" class="btn btn-danger btn-sm">Remover</button>
+              </form>
+            {% elif not h.bloqueado %}
+              <form method="POST" action="{{ url_for('agendar', id=h.id) }}" class="row g-2">
+                <div class="col-8">
+                  <input type="text" name="nome" placeholder="Nome" class="form-control form-control-sm" required>
+                </div>
+                <div class="col-4">
+                  <input type="text" name="turma" placeholder="Turma" class="form-control form-control-sm" required>
+                </div>
+                <div class="col-auto">
+                  <button type="submit" class="btn btn-success btn-sm">Agendar</button>
+                </div>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Carrinho Chrome 2 -->
+<div class="col-md-6">
+  <h6 class="text-center text-decoration-underline">Carrinho Chrome 2</h6>
+  <table class="table table-sm">
+    <tbody>
+      {% for h in horarios|sort(attribute='aula') if h.periodo==periodo and h.piso==piso and h.vaga==2 %}
+        <tr>
+          <td><strong>Aula</strong> <strong>{{ h.aula }}</strong></td>
+          <td>
+            {% if h.user %}
+              {{ h.user.nome }} ({{ h.user.turma }})
+            {% elif h.bloqueado %}
+              <span class="text-muted">Feriado/Ponto Facultativo</span>
+            {% else %}
+              Livre
+            {% endif %}
+          </td>
+          <td>
+            {% if h.user %}
+              <form method="POST" action="{{ url_for('desagendar', id=h.id) }}">
+                <button type="submit" class="btn btn-danger btn-sm">Remover</button>
+              </form>
+            {% elif not h.bloqueado %}
+              <form method="POST" action="{{ url_for('agendar', id=h.id) }}" class="row g-2">
+                <div class="col-8">
+                  <input type="text" name="nome" placeholder="Nome" class="form-control form-control-sm" required>
+                </div>
+                <div class="col-4">
+                  <input type="text" name="turma" placeholder="Turma" class="form-control form-control-sm" required>
+                </div>
+                <div class="col-auto">
+                  <button type="submit" class="btn btn-success btn-sm">Agendar</button>
+                </div>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
