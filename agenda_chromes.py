@@ -10,14 +10,24 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, date, timedelta
 import json
 import uuid
+import os
 from models import db, User, Horario
 
 # ------------------------
 # CONFIGURAÇÃO INICIAL
 # ------------------------
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'segredo_super_seguro'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///agenda.db'
+
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "segredo_super_seguro")
+
+database_url = os.environ.get("DATABASE_URL")
+
+if database_url:
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///agenda.db'
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
@@ -372,13 +382,9 @@ def gerar_agenda_2026():
 # ------------------------
 if __name__ == "__main__":
     with app.app_context():
-        # Cria as tabelas se não existirem
         db.create_all()
-
-        # Gera todos os horários de 2026 (somente dias úteis)
         gerar_agenda_2026()
 
-        # Criar usuário master se não existir
         if not User.query.filter_by(email="franciele.tartari@edu.joinville.sc.gov.br").first():
             master = User(
                 nome="Administrador",
@@ -389,10 +395,4 @@ if __name__ == "__main__":
             db.session.add(master)
             db.session.commit()
 
-    # Inicia a aplicação
-    if __name__ == "__main__":
-        with app.app_context():
-            db.create_all()
-            gerar_agenda_2026()
-
-        app.run(host="0.0.0.0", port=5000)
+    app.run()
