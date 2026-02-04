@@ -27,7 +27,7 @@
         <th>Nome</th>
         <th>Email</th>
         <th>Nova Senha</th>
-        <th>Ação</th>
+        <th>Ações</th>
       </tr>
     </thead>
     <tbody>
@@ -41,6 +41,19 @@
             <input type="password" name="nova_senha" class="form-control me-2" required>
             <button type="submit" class="btn btn-primary btn-sm">Atualizar</button>
           </form>
+        </td>
+        <td>
+          {% if not u.is_admin %}
+          <form method="POST"
+                action="{{ url_for('deletar_usuario', user_id=u.id) }}"
+                onsubmit="return confirm('Tem certeza que deseja excluir este usuário?');">
+            <button type="submit" class="btn btn-danger btn-sm">
+              Excluir
+            </button>
+          </form>
+          {% else %}
+            <span class="text-muted">Administrador</span>
+          {% endif %}
         </td>
       </tr>
       {% endfor %}

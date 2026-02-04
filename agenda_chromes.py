@@ -189,6 +189,26 @@ def gerenciar_usuarios():
     usuarios = User.query.all()
     return render_template("usuarios_admin.html", usuarios=usuarios)
 
+@app.route("/admin/deletar_usuario/<int:user_id>", methods=["POST"])
+@login_required
+def deletar_usuario(user_id):
+    if not current_user.is_admin:
+        flash("Acesso negado.", "danger")
+        return redirect(url_for("calendar"))
+
+    usuario = User.query.get_or_404(user_id)
+
+    # impedir deletar admin
+    if usuario.is_admin:
+        flash("Não é permitido excluir o administrador.", "warning")
+        return redirect(url_for("gerenciar_usuarios"))
+
+    db.session.delete(usuario)
+    db.session.commit()
+
+    flash(f"Usuário {usuario.nome} excluído com sucesso.", "success")
+    return redirect(url_for("gerenciar_usuarios"))
+
 # ------------------------
 # Agendar (usuário comum)
 # ------------------------
