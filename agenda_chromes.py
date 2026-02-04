@@ -3,6 +3,7 @@
 # git add .
 # git commit -m "descrição da alteração"
 # git push
+# https://dashboard.render.com/web/srv-d60i8nkr85hc73dcrnt0
 # Dashboard do Render / Manual Deploy / Deploy latest commit
 
 from flask import Flask, render_template, redirect, url_for, request, flash
