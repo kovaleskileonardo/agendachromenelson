@@ -1,6 +1,9 @@
 # .\venv\Scripts\activate
 # cd "C:\Users\leona\Automação\agenda_flask"
-# python agenda_chromes.py
+# git add .
+# git commit -m "descrição da alteração"
+# git push
+# Dashboard do Render / Manual Deploy / Deploy latest commit
 
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_login import (
@@ -8,6 +11,7 @@ from flask_login import (
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, date, timedelta
+from sqlalchemy import or_
 import json
 import uuid
 import os
@@ -278,7 +282,12 @@ def calendar():
     bloqueados = db.session.query(Horario.data).filter_by(bloqueado=True).distinct().all()
     bloqueados = [b[0].strftime("%Y-%m-%d") for b in bloqueados]
 
-    agendados = db.session.query(Horario.data).filter(Horario.user_id.isnot(None)).distinct().all()
+    agendados = db.session.query(Horario.data)\
+    .filter(or_(
+        Horario.user_id.isnot(None),
+        Horario.nome.isnot(None)
+    ))\
+    .distinct().all()
     agendados = [a[0].strftime("%Y-%m-%d") for a in agendados]
 
     eventos = []
